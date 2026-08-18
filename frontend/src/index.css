@@ -1,0 +1,71 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  --color-brand-50: #f2f6ff;
+  --color-brand-100: #e5edff;
+  --color-brand-200: #c7d9ff;
+  --color-brand-300: #a3bdff;
+  --color-brand-400: #7b98ff;
+  --color-brand-500: #5b74fa;
+  --color-brand-600: #4453e0;
+  --color-brand-700: #3740b3;
+  --color-brand-800: #2c338c;
+  --color-brand-900: #232969;
+
+  --color-mint-400: #5fe3c0;
+  --color-mint-500: #33d1a6;
+
+  --color-coral-400: #ff9d8a;
+  --color-coral-500: #ff7a61;
+
+  --color-ink-50: #f7f8fc;
+  --color-ink-100: #eef0f9;
+  --color-ink-400: #8890ab;
+  --color-ink-600: #565f80;
+  --color-ink-800: #2c3150;
+  --color-ink-900: #1a1d33;
+
+  --shadow-glossy: 0 1px 1px rgba(35, 41, 105, 0.04), 0 8px 24px -8px rgba(35, 41, 105, 0.18), inset 0 1px 0 rgba(255,255,255,0.6);
+  --shadow-island: 0 10px 40px -12px rgba(35, 41, 105, 0.35);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background:
+    radial-gradient(1200px 600px at 10% -10%, #eaf0ff 0%, transparent 60%),
+    radial-gradient(1000px 500px at 90% 0%, #e8fff8 0%, transparent 55%),
+    #f7f8fc;
+  color: var(--color-ink-900);
+}
+
+::selection {
+  background: var(--color-brand-200);
+  color: var(--color-ink-900);
+}
+
+.glass-panel {
+  background: linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,255,255,0.6));
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,0.6);
+}
+
+.glossy-card {
+  background: linear-gradient(160deg, #ffffff 0%, #f6f8ff 100%);
+  box-shadow: var(--shadow-glossy);
+  border: 1px solid rgba(91, 116, 250, 0.08);
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: var(--color-brand-200);
+  border-radius: 999px;
+}
