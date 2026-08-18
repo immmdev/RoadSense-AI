@@ -2,7 +2,8 @@ backend/.venv/
 backend/ml/*.joblib
 data/processed/*.duckdb
 data/processed/*.duckdb.wal
-data/raw/*.csv
+# AccidentsBig.csv is committed intentionally — Render's build step needs it
+# to rebuild the DuckDB file, model, and hotspots on every deploy.
 __pycache__/
 *.pyc
 .env

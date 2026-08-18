@@ -115,6 +115,30 @@ fraction of requests. Pick any free port; just keep `frontend/.env`'s
   this scale; a high-concurrency deployment would want per-request cursors
   or a move to Postgres.
 
+## Deploying to Render
+
+`render.yaml` at the repo root defines the service. Render (via its Blueprint
+feature — "New +" → "Blueprint" → point at this repo) will:
+
+1. `bash build.sh` — installs `requirements.txt`, then runs `ingest_data.py`
+   → `train_severity_model.py` → `detect_hotspots.py` against the committed
+   `data/raw/AccidentsBig.csv`, rebuilding the DuckDB file and model fresh
+   on every deploy (no persistent disk needed — this is why the raw CSV is
+   committed to the repo instead of gitignored, unlike the derived DuckDB
+   file and `.joblib` model, which stay generated-only).
+2. Start with `uvicorn app.main:app --host 0.0.0.0 --port $PORT` — Render
+   assigns `$PORT` dynamically, so the app must bind to it and to `0.0.0.0`,
+   not a hardcoded port/host.
+
+After the frontend is deployed, update the `CORS_ORIGINS` env var on the
+Render service (Dashboard → your service → Environment) to the frontend's
+real URL — the checked-in default only allows `localhost:5173`, so
+requests from a deployed frontend will otherwise fail with a CORS error.
+
+Rebuilding the model on every deploy means Render's free-tier build will
+take a couple of minutes (ETL + DBSCAN + Random Forest training), not
+seconds — expected, not a hang.
+
 ## Next phases (not yet built)
 
 Frontend (React + Leaflet risk map + dashboard), LLM natural-language query

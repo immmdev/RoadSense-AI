@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: urbanrisk-backend
+    runtime: python
+    rootDir: backend
+    plan: free
+    buildCommand: bash build.sh
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.7
+      - key: CORS_ORIGINS
+        value: http://localhost:5173
+        # Replace with your deployed frontend's real URL(s), comma-separated,
+        # once it's live (e.g. https://your-app.vercel.app).
+    healthCheckPath: /health
