@@ -60,7 +60,7 @@ export default function Hero() {
               <p className="text-xs text-ink-600 mb-2">Severity mix</p>
               <div className="flex h-2.5 rounded-full overflow-hidden">
                 <div className="bg-coral-500" style={{ width: "1%" }} />
-                <div className="bg-brand-400" style={{ width: "12%" }} />
+                <div className="bg-amber-500" style={{ width: "12%" }} />
                 <div className="bg-mint-400" style={{ width: "87%" }} />
               </div>
               <div className="mt-2 flex justify-between text-[11px] text-ink-400">

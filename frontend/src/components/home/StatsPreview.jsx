@@ -16,7 +16,7 @@ export default function StatsPreview() {
   const cards = [
     { icon: ShieldAlert, label: "Total accidents", value: severity.data.total.toLocaleString(), tone: "brand" },
     { icon: AlertOctagon, label: "Fatal accidents", value: (bySeverity.Fatal ?? 0).toLocaleString(), tone: "coral" },
-    { icon: Ambulance, label: "Serious accidents", value: (bySeverity.Serious ?? 0).toLocaleString(), tone: "mint" },
+    { icon: Ambulance, label: "Serious accidents", value: (bySeverity.Serious ?? 0).toLocaleString(), tone: "amber" },
     { icon: MapPinned, label: "High / critical hotspots", value: criticalHotspots.toLocaleString(), tone: "brand" },
   ];
 
@@ -28,7 +28,7 @@ export default function StatsPreview() {
             <div key={label} className="glossy-card rounded-2xl p-6">
               <span
                 className={`inline-grid place-items-center w-10 h-10 rounded-xl mb-4 ${
-                  tone === "coral" ? "bg-coral-500/10 text-coral-500" : tone === "mint" ? "bg-mint-400/15 text-mint-500" : "bg-brand-500/10 text-brand-600"
+                  tone === "coral" ? "bg-coral-500/10 text-coral-500" : tone === "amber" ? "bg-amber-400/20 text-amber-500" : "bg-brand-500/10 text-brand-600"
                 }`}
               >
                 <Icon size={18} />

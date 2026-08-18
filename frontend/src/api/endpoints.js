@@ -9,6 +9,7 @@ export const analyticsApi = {
   severity: () => api.get("/analytics/severity"),
   hourly: () => api.get("/analytics/hourly"),
   yearly: () => api.get("/analytics/yearly"),
+  monthly: () => api.get("/analytics/monthly"),
   dayOfWeek: () => api.get("/analytics/day-of-week"),
   byDimension: (dimension, severityCode) => api.get(`/analytics/by-dimension/${dimension}`, { severity_code: severityCode }),
   leadingCauses: (topN = 10) => api.get("/analytics/leading-causes", { top_n: topN }),

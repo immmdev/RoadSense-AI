@@ -20,6 +20,11 @@ def yearly_trend():
     return analytics_service.yearly_trend()
 
 
+@router.get("/monthly")
+def monthly_trend():
+    return analytics_service.monthly_trend()
+
+
 @router.get("/day-of-week")
 def day_of_week_distribution():
     return analytics_service.day_of_week_distribution()

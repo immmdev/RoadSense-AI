@@ -1,7 +1,10 @@
-export default function FormField({ label, children }) {
+export default function FormField({ label, icon: Icon, children }) {
   return (
     <label className="block">
-      <span className="block text-xs font-semibold text-ink-600 mb-1.5">{label}</span>
+      <span className="flex items-center gap-1.5 text-xs font-semibold text-ink-600 mb-1.5">
+        {Icon && <Icon size={13} className="text-brand-500" />}
+        {label}
+      </span>
       {children}
     </label>
   );

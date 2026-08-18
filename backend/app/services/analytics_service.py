@@ -41,6 +41,41 @@ def yearly_trend() -> list[dict]:
     return [{"year": y, "count": c} for y, c in rows]
 
 
+_MONTH_NAMES = {
+    1: "Jan", 2: "Feb", 3: "Mar", 4: "Apr", 5: "May", 6: "Jun",
+    7: "Jul", 8: "Aug", 9: "Sep", 10: "Oct", 11: "Nov", 12: "Dec",
+}
+
+
+def monthly_trend() -> list[dict]:
+    con = get_connection()
+    rows = con.execute(
+        """
+        SELECT
+            month,
+            COUNT(*) AS total,
+            SUM(CASE WHEN severity_code = 1 THEN 1 ELSE 0 END) AS fatal,
+            SUM(CASE WHEN severity_code = 2 THEN 1 ELSE 0 END) AS serious,
+            SUM(CASE WHEN severity_code = 3 THEN 1 ELSE 0 END) AS slight
+        FROM accidents
+        WHERE month IS NOT NULL
+        GROUP BY month
+        ORDER BY month
+        """
+    ).fetchall()
+    return [
+        {
+            "month": m,
+            "month_label": _MONTH_NAMES.get(m, str(m)),
+            "count": total,
+            "fatal_count": fatal,
+            "serious_count": serious,
+            "slight_count": slight,
+        }
+        for m, total, fatal, serious, slight in rows
+    ]
+
+
 def day_of_week_distribution() -> list[dict]:
     con = get_connection()
     rows = con.execute(

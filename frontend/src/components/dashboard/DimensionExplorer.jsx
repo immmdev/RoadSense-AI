@@ -1,10 +1,12 @@
 import { useState } from "react";
-import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { Bar, BarChart, CartesianGrid, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { SlidersHorizontal } from "lucide-react";
 import ChartCard from "./ChartCard";
 import { useApi } from "../../hooks/useApi";
 import { analyticsApi } from "../../api/endpoints";
 import { Loading, ErrorState } from "../common/StatusState";
-import { chartColors } from "../../utils/chartColors";
+import { categoricalColor, chartColors } from "../../utils/chartColors";
+import { conditionIconFor } from "../../utils/conditionIcons";
 
 const DIMENSIONS = [
   { key: "weather", label: "Weather" },
@@ -16,14 +18,32 @@ const DIMENSIONS = [
   { key: "time_of_day", label: "Time of day" },
 ];
 
+function IconTick({ x, y, payload, dimension }) {
+  const Icon = conditionIconFor(dimension, payload.value);
+  return (
+    <g transform={`translate(${x},${y})`}>
+      {Icon && (
+        <foreignObject x={-158} y={-9} width={18} height={18}>
+          <Icon size={14} color={chartColors.ink} />
+        </foreignObject>
+      )}
+      <text x={Icon ? -136 : -140} y={0} dy={4} textAnchor="start" fontSize={11} fill={chartColors.ink}>
+        {payload.value}
+      </text>
+    </g>
+  );
+}
+
 export default function DimensionExplorer() {
   const [dimension, setDimension] = useState("weather");
   const { data, error, loading } = useApi(() => analyticsApi.byDimension(dimension), [dimension]);
 
   return (
     <ChartCard
-      title="Breakdown by condition"
-      subtitle="Which conditions accidents happen under"
+      icon={SlidersHorizontal}
+      title="Which conditions show up most?"
+      subtitle="Pick a factor to see how often accidents happen under each condition"
+      hint="A tall bar here doesn't automatically mean a condition is dangerous — clear, dry weather has the most accidents simply because most driving happens in clear, dry weather. Compare this against the risk predictor to see which conditions raise risk per trip, not just in total count."
       className="col-span-full"
       action={
         <select
@@ -40,20 +60,24 @@ export default function DimensionExplorer() {
       {loading && <Loading />}
       {error && <ErrorState error={error} />}
       {data && (
-        <ResponsiveContainer width="100%" height={320}>
+        <ResponsiveContainer width="100%" height={340}>
           <BarChart data={data} layout="vertical" margin={{ left: 24 }}>
             <CartesianGrid horizontal={false} stroke={chartColors.grid} />
             <XAxis type="number" tick={{ fontSize: 11, fill: chartColors.ink }} axisLine={false} tickLine={false} />
             <YAxis
               type="category"
               dataKey="label"
-              width={140}
-              tick={{ fontSize: 11, fill: chartColors.ink }}
+              width={160}
+              tick={<IconTick dimension={dimension} />}
               axisLine={false}
               tickLine={false}
             />
-            <Tooltip contentStyle={{ borderRadius: 12, border: "1px solid #eef0f9", fontSize: 13 }} cursor={{ fill: "rgba(91,116,250,0.06)" }} />
-            <Bar dataKey="count" fill={chartColors.brand} radius={[0, 8, 8, 0]} />
+            <Tooltip contentStyle={{ borderRadius: 12, border: "1px solid #f0eaf7", fontSize: 13 }} cursor={{ fill: "rgba(157,95,212,0.06)" }} />
+            <Bar dataKey="count" name="Accidents" radius={[0, 8, 8, 0]}>
+              {data.map((entry, i) => (
+                <Cell key={entry.label} fill={categoricalColor(i)} />
+              ))}
+            </Bar>
           </BarChart>
         </ResponsiveContainer>
       )}

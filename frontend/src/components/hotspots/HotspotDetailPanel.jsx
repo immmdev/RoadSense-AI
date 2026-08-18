@@ -4,6 +4,7 @@ import { useApi } from "../../hooks/useApi";
 import { hotspotsApi } from "../../api/endpoints";
 import { Loading, ErrorState } from "../common/StatusState";
 import { RISK_BADGE_CLASSES } from "../../utils/riskColor";
+import { weatherIcon, surfaceIcon } from "../../utils/conditionIcons";
 
 export default function HotspotDetailPanel({ hotspotId }) {
   const { data, error, loading } = useApi(
@@ -38,42 +39,47 @@ export default function HotspotDetailPanel({ hotspotId }) {
       <div className="grid grid-cols-3 gap-3 mb-5">
         <MiniStat label="Total" value={data.accident_count} />
         <MiniStat label="Fatal" value={data.fatal_count} tone="coral" />
-        <MiniStat label="Serious" value={data.serious_count} tone="brand" />
+        <MiniStat label="Serious" value={data.serious_count} tone="amber" />
       </div>
 
-      <div className="flex items-center gap-2 text-sm text-ink-700 mb-5 bg-ink-50 rounded-xl px-3.5 py-2.5">
-        <Clock size={14} className="text-brand-600" />
+      <div className="flex items-center gap-2 text-sm text-ink-700 mb-5 bg-brand-500/5 rounded-xl px-3.5 py-2.5">
+        <Clock size={14} className="text-brand-600 shrink-0" />
         Peak risk window: <span className="font-semibold">{data.peak_hour_range}</span>
       </div>
 
-      <DetailList title="Top weather at time of crash" items={data.top_weather} />
-      <DetailList title="Top road surface conditions" items={data.top_road_surface} className="mt-4" />
+      <DetailList title="Top weather at time of crash" items={data.top_weather} iconFor={weatherIcon} />
+      <DetailList title="Top road surface conditions" items={data.top_road_surface} iconFor={surfaceIcon} className="mt-4" />
     </div>
   );
 }
 
 function MiniStat({ label, value, tone }) {
+  const toneClass = tone === "coral" ? "text-coral-500" : tone === "amber" ? "text-amber-500" : "text-ink-900";
   return (
     <div className="rounded-xl border border-ink-100 px-3 py-2.5 text-center">
-      <p className={clsx("text-lg font-bold", tone === "coral" ? "text-coral-500" : tone === "brand" ? "text-brand-600" : "text-ink-900")}>
-        {value}
-      </p>
+      <p className={clsx("text-lg font-bold", toneClass)}>{value}</p>
       <p className="text-[11px] text-ink-400">{label}</p>
     </div>
   );
 }
 
-function DetailList({ title, items, className = "" }) {
+function DetailList({ title, items, iconFor, className = "" }) {
   return (
     <div className={className}>
       <p className="text-xs font-semibold text-ink-600 mb-2">{title}</p>
       <div className="space-y-1.5">
-        {items.map((item) => (
-          <div key={item.label} className="flex items-center justify-between text-sm">
-            <span className="text-ink-700">{item.label}</span>
-            <span className="text-ink-400">{item.count}</span>
-          </div>
-        ))}
+        {items.map((item) => {
+          const Icon = iconFor?.(item.label);
+          return (
+            <div key={item.label} className="flex items-center justify-between text-sm">
+              <span className="flex items-center gap-1.5 text-ink-700">
+                {Icon && <Icon size={13} className="text-ink-400" />}
+                {item.label}
+              </span>
+              <span className="text-ink-400">{item.count}</span>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

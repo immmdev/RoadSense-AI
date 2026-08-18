@@ -1,5 +1,17 @@
 import { useState } from "react";
-import { Gauge, Loader2 } from "lucide-react";
+import {
+  CalendarDays,
+  Cloud,
+  Gauge,
+  Gauge as SpeedIcon,
+  Lightbulb,
+  Loader2,
+  MapPin,
+  Milestone,
+  Signpost,
+  Clock,
+  Waves,
+} from "lucide-react";
 import FormField, { selectClasses } from "./FormField";
 import { useApi } from "../../hooks/useApi";
 import { referenceApi, predictApi } from "../../api/endpoints";
@@ -49,59 +61,64 @@ export default function RiskForm({ onResult }) {
 
   return (
     <form onSubmit={handleSubmit} className="glossy-card rounded-2xl p-6 space-y-5">
+      <p className="text-sm text-ink-600 -mt-1 mb-1">
+        Fill in the conditions at a location and time — no need to know exact
+        statistics, just describe the situation as you'd see it.
+      </p>
+
       <div className="grid sm:grid-cols-2 gap-4">
-        <FormField label="Hour of day (0-23)">
+        <FormField label="Hour of day (0-23)" icon={Clock}>
           <input
             type="number" min={0} max={23} value={form.hour} onChange={update("hour")}
             className={selectClasses}
           />
         </FormField>
-        <FormField label="Speed limit (mph)">
+        <FormField label="Speed limit (mph)" icon={SpeedIcon}>
           <input
             type="number" min={0} max={130} step={5} value={form.speed_limit} onChange={update("speed_limit")}
             className={selectClasses}
           />
         </FormField>
 
-        <FormField label="Day of week">
+        <FormField label="Day of week" icon={CalendarDays}>
           <select value={form.day_of_week_code} onChange={update("day_of_week_code")} className={selectClasses}>
             {codeOptions(codes.day_of_week).map((o) => <option key={o.code} value={o.code}>{o.label}</option>)}
           </select>
         </FormField>
-        <FormField label="Road type">
+        <FormField label="Road type" icon={Milestone}>
           <select value={form.road_type_code} onChange={update("road_type_code")} className={selectClasses}>
             {codeOptions(codes.road_type).map((o) => <option key={o.code} value={o.code}>{o.label}</option>)}
           </select>
         </FormField>
 
-        <FormField label="Junction detail">
+        <FormField label="Junction detail" icon={Signpost}>
           <select value={form.junction_detail_code} onChange={update("junction_detail_code")} className={selectClasses}>
             {codeOptions(codes.junction_detail).map((o) => <option key={o.code} value={o.code}>{o.label}</option>)}
           </select>
         </FormField>
-        <FormField label="Junction control">
+        <FormField label="Junction control" icon={Signpost}>
           <select value={form.junction_control_code} onChange={update("junction_control_code")} className={selectClasses}>
             {codeOptions(codes.junction_control).map((o) => <option key={o.code} value={o.code}>{o.label}</option>)}
           </select>
         </FormField>
 
-        <FormField label="Light conditions">
+        <FormField label="Light conditions" icon={Lightbulb}>
           <select value={form.light_conditions_code} onChange={update("light_conditions_code")} className={selectClasses}>
             {codeOptions(codes.light_conditions).map((o) => <option key={o.code} value={o.code}>{o.label}</option>)}
           </select>
         </FormField>
-        <FormField label="Weather conditions">
+        <FormField label="Weather conditions" icon={Cloud}>
           <select value={form.weather_conditions_code} onChange={update("weather_conditions_code")} className={selectClasses}>
             {codeOptions(codes.weather_conditions).map((o) => <option key={o.code} value={o.code}>{o.label}</option>)}
           </select>
         </FormField>
 
-        <FormField label="Road surface conditions">
+        <FormField label="Road surface conditions" icon={Waves}>
           <select value={form.road_surface_conditions_code} onChange={update("road_surface_conditions_code")} className={selectClasses}>
             {codeOptions(codes.road_surface_conditions).map((o) => <option key={o.code} value={o.code}>{o.label}</option>)}
           </select>
         </FormField>
-        <FormField label="Area type">
+        <FormField label="Area type" icon={MapPin}>
           <select value={form.urban_or_rural_area_code} onChange={update("urban_or_rural_area_code")} className={selectClasses}>
             {codeOptions(codes.urban_or_rural_area).map((o) => <option key={o.code} value={o.code}>{o.label}</option>)}
           </select>
