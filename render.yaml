@@ -10,7 +10,5 @@ services:
       - key: PYTHON_VERSION
         value: 3.12.7
       - key: CORS_ORIGINS
-        value: http://localhost:5173
-        # Replace with your deployed frontend's real URL(s), comma-separated,
-        # once it's live (e.g. https://your-app.vercel.app).
+        value: http://localhost:5173,https://road-sense-ai-phi.vercel.app
     healthCheckPath: /health
